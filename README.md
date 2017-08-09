@@ -12,7 +12,7 @@ Download the ANE from the [releases](../../releases/) page and add it to your ap
 </extensions>
 ```
 
-If you are targeting Android, add the Android Support extension from [this repository](https://github.com/marpies/android-dependency-anes) as well (unless you know it is included by some other extension):
+If you are targeting Android, add the Android Support extension from [this repository](https://github.com/marpies/android-dependency-anes/releases) as well (unless you know it is included by some other extension):
 
 ```xml
 <extensions>
@@ -50,7 +50,7 @@ Furthermore, modify `manifestAdditions` element so that it contains the followin
 
 Make sure to replace the `{APP_PACKAGE_NAME}` token with your application id (value of the `id` element in your AIR app descriptor). Remember the id is prefixed with `air.` by default.
 
-Add the following key-value pairs to your `InfoAdditions` to avoid crashes on iOS 10+ when saving an image to photos library or assigning it to a contact, :
+Add the following key-value pairs to your `InfoAdditions` to avoid crashes on iOS 10+ when saving an image to photos library or assigning it to a contact:
 
 ```xml
 <iPhone>

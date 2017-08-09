@@ -1,0 +1,10 @@
+<platform xmlns="http://ns.adobe.com/air/extension/19.0">
+
+     <packagedResources>
+        <packagedResource> 
+            <packageName>com.digitalstrawberry.ane.share</packageName> 
+            <folderName>com.digitalstrawberry.ane.share-res</folderName> 
+        </packagedResource>
+    </packagedResources> 
+
+</platform>

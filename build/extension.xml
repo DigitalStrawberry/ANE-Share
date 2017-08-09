@@ -1,0 +1,41 @@
+<extension xmlns="http://ns.adobe.com/air/extension/19.0">
+  <id>com.digitalstrawberry.ane.share</id>
+  <versionNumber>1.0.0</versionNumber>
+  <platforms>
+     <platform name="iPhone-ARM">
+        <applicationDeployment>
+            <nativeLibrary>libShare.a</nativeLibrary>
+            <initializer>AIRShareInitializer</initializer>
+            <finalizer>AIRShareFinalizer</finalizer>
+        </applicationDeployment>
+    </platform> 
+
+    <platform name="iPhone-x86">
+        <applicationDeployment>
+            <nativeLibrary>libShare.a</nativeLibrary>
+            <initializer>AIRShareInitializer</initializer>
+            <finalizer>AIRShareFinalizer</finalizer>
+        </applicationDeployment>
+    </platform>
+
+    <platform name="Android-ARM">
+        <applicationDeployment>
+            <nativeLibrary>libShare.jar</nativeLibrary>
+            <initializer>com.digitalstrawberry.ane.share.ShareExtension</initializer>
+            <finalizer>com.digitalstrawberry.ane.share.ShareExtension</finalizer>
+        </applicationDeployment>
+    </platform>
+
+    <platform name="Android-x86">
+        <applicationDeployment>
+            <nativeLibrary>libShare.jar</nativeLibrary>
+            <initializer>com.digitalstrawberry.ane.share.ShareExtension</initializer>
+            <finalizer>com.digitalstrawberry.ane.share.ShareExtension</finalizer>
+        </applicationDeployment>
+    </platform>
+
+    <platform name="default">
+        <applicationDeployment/>
+    </platform>
+  </platforms>
+</extension>

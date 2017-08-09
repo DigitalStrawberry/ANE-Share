@@ -1,0 +1,54 @@
+
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.1.+'
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+
+apply plugin: 'com.android.library'
+
+dependencies {
+    compile files('libs/FlashRuntimeExtensions.jar')
+    compile files('libs/runtimeClasses.jar')
+    compile 'com.android.support:support-v4:24+'
+}
+
+android {
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 23
+    }
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+    
+    lintOptions {
+        abortOnError false
+    }
+
+    sourceSets {
+        main {
+            manifest {
+                srcFile 'AndroidManifest.xml'
+            }
+            java {
+                srcDir 'src'
+            }
+            res {
+                srcDir 'com.digitalstrawberry.ane.share-res'
+            }
+        }
+    }
+}
+
+
+
+

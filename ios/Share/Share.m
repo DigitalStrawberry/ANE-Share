@@ -22,8 +22,6 @@
  * SOFTWARE.
  */
 
-#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v) ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
-
 #import <AIRExtHelpers/MPFREObjectUtils.h>
 #import <AIRExtHelpers/MPBitmapDataUtils.h>
 #import "Share.h"
@@ -62,21 +60,26 @@ FREContext ShareExtContext = nil;
         return;
     }
     
-    UIActivityViewController *activityViewControntroller = [[UIActivityViewController alloc] initWithActivityItems:sharedItems applicationActivities:nil];
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:sharedItems applicationActivities:nil];
     
-    if( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad ) {
-        CGRect popOverRect = [self getRectFromOptions:freOptions];
-        activityViewControntroller.popoverPresentationController.sourceView = [rootView view];
-        activityViewControntroller.popoverPresentationController.sourceRect = popOverRect;
-        UIPopoverArrowDirection direction = [self getArrowDirectionFromOptions:freOptions];
-        if( direction == UIPopoverArrowDirectionUnknown )
+    if( UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad )
+    {
+        if( [activityViewController respondsToSelector:@selector(popoverPresentationController)] )
         {
-            direction = 0; // No arrow
+            CGRect popOverRect = [self getRectFromOptions:freOptions];
+            activityViewController.popoverPresentationController.sourceView = [rootView view];
+            activityViewController.popoverPresentationController.sourceRect = popOverRect;
+            UIPopoverArrowDirection direction = [self getArrowDirectionFromOptions:freOptions];
+            if( direction == UIPopoverArrowDirectionUnknown )
+            {
+                direction = 0; // No arrow
+            }
+            activityViewController.popoverPresentationController.permittedArrowDirections = direction;
         }
-        activityViewControntroller.popoverPresentationController.permittedArrowDirections = direction;
     }
     
-    [activityViewControntroller setCompletionHandler:^(NSString* activity, BOOL done) {
+    [activityViewController setCompletionHandler:^(NSString* activity, BOOL done)
+    {
         // Fixes bug with non-dismissable view when user taps outside before the corresponding activity's view appears
         [rootView dismissViewControllerAnimated:NO completion:nil];
         
@@ -85,12 +88,12 @@ FREContext ShareExtContext = nil;
         [self dispatchEvent:event withMessage:activity];
     }];
     
-    [rootView presentViewController:activityViewControntroller animated:YES completion:nil];
+    [rootView presentViewController:activityViewController animated:YES completion:nil];
 }
 
 - (BOOL) isSupported
 {
-    return SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(@"8.0") && ([UIActivityViewController class] != nil);
+    return floor(NSFoundationVersionNumber) >= NSFoundationVersionNumber_iOS_7_0 && ([UIActivityViewController class] != nil);
 }
 
 

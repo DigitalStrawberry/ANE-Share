@@ -93,7 +93,7 @@ FREContext ShareExtContext = nil;
 
 - (BOOL) isSupported
 {
-    return floor(NSFoundationVersionNumber) >= NSFoundationVersionNumber_iOS_7_0 && ([UIActivityViewController class] != nil);
+    return floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_6_1 && ([UIActivityViewController class] != nil);
 }
 
 

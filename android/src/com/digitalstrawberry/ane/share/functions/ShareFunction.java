@@ -39,6 +39,7 @@ import com.digitalstrawberry.ane.share.utils.BitmapDataUtils;
 import com.digitalstrawberry.ane.share.utils.FREObjectUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -70,6 +71,7 @@ public class ShareFunction extends BaseFunction implements IANEShareActivityResu
         } catch (Exception e)
         {
             e.printStackTrace();
+            AIR.dispatchEvent(ShareEvent.SHARE_ERROR, e.getLocalizedMessage());
         }
 
         return null;
@@ -89,7 +91,7 @@ public class ShareFunction extends BaseFunction implements IANEShareActivityResu
     }
 
 
-    private boolean addSharedItems(FREArray freSharedItems, Intent shareIntent) throws FREWrongThreadException, FREInvalidObjectException, FRETypeMismatchException, FREASErrorException, FRENoSuchNameException
+    private boolean addSharedItems(FREArray freSharedItems, Intent shareIntent) throws FREWrongThreadException, FREInvalidObjectException, FRETypeMismatchException, FREASErrorException, FRENoSuchNameException, IOException
     {
         long numItems = freSharedItems.getLength();
         int numImages = 0;
@@ -177,18 +179,9 @@ public class ShareFunction extends BaseFunction implements IANEShareActivityResu
         return addedItems;
     }
 
-    private Uri getUriForBitmap(FREBitmapData bitmapData, int imageIndex)
+    private Uri getUriForBitmap(FREBitmapData bitmapData, int imageIndex) throws IOException, FREWrongThreadException, FREInvalidObjectException
     {
-        Bitmap bmp = null;
-        try
-        {
-            bmp = BitmapDataUtils.getBitmap(bitmapData);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+        Bitmap bmp = BitmapDataUtils.getBitmap(bitmapData);
 
         // Failed to generate Bitmap
         if (bmp == null)
@@ -196,24 +189,15 @@ public class ShareFunction extends BaseFunction implements IANEShareActivityResu
             return null;
         }
 
-        try
-        {
-            Context ctx = AIR.getContext().getActivity().getApplicationContext();
-            File cachePath = new File(ctx.getCacheDir(), SHARE_DIR);
-            cachePath.mkdirs();
-            File imageFile = new File(cachePath, IMAGE_NAME + imageIndex + IMAGE_EXT);
-            FileOutputStream stream = new FileOutputStream(imageFile);
-            bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            stream.close();
+        Context ctx = AIR.getContext().getActivity().getApplicationContext();
+        File cachePath = new File(ctx.getCacheDir(), SHARE_DIR);
+        cachePath.mkdirs();
+        File imageFile = new File(cachePath, IMAGE_NAME + imageIndex + IMAGE_EXT);
+        FileOutputStream stream = new FileOutputStream(imageFile);
+        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        stream.close();
 
-            return FileProvider.getUriForFile(ctx, ctx.getPackageName() + ".fileprovider", imageFile);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-        return null;
+        return FileProvider.getUriForFile(ctx, ctx.getPackageName() + ".fileprovider", imageFile);
     }
 
 }

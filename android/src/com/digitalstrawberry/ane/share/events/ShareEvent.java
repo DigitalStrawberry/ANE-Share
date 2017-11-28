@@ -29,5 +29,6 @@ public class ShareEvent
 
     public static final String SHARE_COMPLETE = "ShareEvent::complete";
     public static final String SHARE_CANCEL = "ShareEvent::cancel";
+    public static final String SHARE_ERROR = "ShareEvent::error";
 
 }

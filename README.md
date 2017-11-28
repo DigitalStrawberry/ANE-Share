@@ -127,6 +127,10 @@ private function onSharingFinished(event:ShareEvent):void
 
 ### Changelog
 
+#### November 28, 2017 (v1.0.3)
+
+* Updated error handling
+
 #### October 16, 2017 (v1.0.2)
 
 * Added support for iOS 7

@@ -54,9 +54,16 @@ FREContext ShareExtContext = nil;
     
     NSArray* sharedItems = [self getSharedItems:freSharedItems];
     
+    if( sharedItems == nil )
+    {
+        // Error parsing data
+        return;
+    }
+    
     if( sharedItems.count == 0 )
     {
         NSLog(@"There is no data to be shared!");
+        [self dispatchEvent:kEVENT_SHARE_ERROR withMessage:@"There is no data to be shared."];
         return;
     }
     
@@ -125,7 +132,8 @@ FREContext ShareExtContext = nil;
         if( FREGetArrayElementAt(freSharedItems, i, &itemRaw) != FRE_OK )
         {
             NSLog(@"Error retrieving Vector.<SharedData> element at index %u", i);
-            continue;
+            [self dispatchEvent:kEVENT_SHARE_ERROR withMessage:[NSString stringWithFormat:@"Error retrieving Vector.<SharedData> element at index %u", i]];
+            return nil;
         }
         
         // Check whether this data should be shared with Facebook
@@ -133,7 +141,8 @@ FREContext ShareExtContext = nil;
         if( ![self getObjectProperty:itemRaw propertyName:@"shareWithFacebook" propertyValue:&freSharedWithFB] )
         {
             NSLog(@"Error reading 'shareWithFacebook' property from SharedData object");
-            continue;
+            [self dispatchEvent:kEVENT_SHARE_ERROR withMessage:@"Error reading 'shareWithFacebook' property from SharedData object."];
+            return nil;
         }
         
         // Get the actual data (either a String or BitmapData)
@@ -141,14 +150,16 @@ FREContext ShareExtContext = nil;
         if( ![self getObjectProperty:itemRaw propertyName:@"data" propertyValue:&freData] )
         {
             NSLog(@"Error reading 'data' property from SharedData object");
-            continue;
+            [self dispatchEvent:kEVENT_SHARE_ERROR withMessage:@"Error reading 'data' property from SharedData object."];
+            return nil;
         }
         
         id data = [self getSharedData:freData];
         if( data == nil )
         {
+            // Error is dispatched in getSharedData
             NSLog(@"Error reading 'data' property from SharedData object");
-            continue;
+            return nil;
         }
         
         // Add the item to the result list
@@ -246,6 +257,7 @@ FREContext ShareExtContext = nil;
     if( FREGetObjectType(freData, &freDataType) != FRE_OK )
     {
         NSLog(@"Error retrieving data type of the shared data");
+        [self dispatchEvent:kEVENT_SHARE_ERROR withMessage:@"Error retrieving data type of the shared data."];
         return nil;
     }
     
@@ -262,6 +274,8 @@ FREContext ShareExtContext = nil;
         FREReleaseBitmapData(freData);
         return image;
     }
+    
+    [self dispatchEvent:kEVENT_SHARE_ERROR withMessage:[NSString stringWithFormat:@"Invalid type of shared data: %i", freDataType]];
     
     NSLog(@"Invalid type of shared data: %i", freDataType);
     return nil;

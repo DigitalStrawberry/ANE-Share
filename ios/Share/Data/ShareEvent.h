@@ -29,5 +29,6 @@
 
 const NSString* const kEVENT_SHARE_COMPLETE = @"ShareEvent::complete";
 const NSString* const kEVENT_SHARE_CANCEL = @"ShareEvent::cancel";
+const NSString* const kEVENT_SHARE_ERROR = @"ShareEvent::error";
 
 #endif /* ShareEvent_h */

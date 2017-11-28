@@ -212,7 +212,7 @@ package com.digitalstrawberry.ane.share
 
 				case ShareEvent.ERROR:
 						mLastSharedData = null;
-						dispatchEvent(new ShareEvent(ShareEvent.ERROR));
+						dispatchEvent(new ShareEvent(ShareEvent.ERROR, null, event.level));
 					return;
 			}
 		}

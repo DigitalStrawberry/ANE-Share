@@ -33,12 +33,14 @@ package com.digitalstrawberry.ane.share.events
 		public static const ERROR:String = "ShareEvent::error";
 
 		private var mSharedActivity:String;
+		private var mErrorMessage:String;
 
-		public function ShareEvent(type:String, sharedActivity:String = null)
+		public function ShareEvent(type:String, sharedActivity:String = null, errorMessage:String = null)
 		{
 			super(type, false, false);
 
 			mSharedActivity = sharedActivity;
+			mErrorMessage = errorMessage;
 		}
 
 
@@ -47,6 +49,11 @@ package com.digitalstrawberry.ane.share.events
 			return mSharedActivity;
 		}
 		
+
+		public function get errorMessage():String
+		{
+			return mErrorMessage;
+		}
 	}
 	
 }

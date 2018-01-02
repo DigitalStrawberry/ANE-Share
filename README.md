@@ -127,6 +127,10 @@ private function onSharingFinished(event:ShareEvent):void
 
 ### Changelog
 
+#### January 2, 2018 (v1.0.4)
+
+* Updated sharing dialog (Android)
+
 #### November 28, 2017 (v1.0.3)
 
 * Updated error handling

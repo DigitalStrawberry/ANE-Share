@@ -39,7 +39,6 @@ import com.digitalstrawberry.ane.share.utils.BitmapDataUtils;
 import com.digitalstrawberry.ane.share.utils.FREObjectUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,11 +61,14 @@ public class ShareFunction extends BaseFunction implements IANEShareActivityResu
 
         try
         {
-            Intent shareIntent = Intent.createChooser(new Intent(), "Share");
+            Intent shareIntent = new Intent();
             if(addSharedItems(freSharedItems, shareIntent))
             {
                 AndroidActivityWrapper.GetAndroidActivityWrapper().addActivityResultListener( this );
-                AIR.getContext().getActivity().startActivityForResult(shareIntent, SHARE_REQUEST_CODE);
+                AIR.getContext().getActivity().startActivityForResult(
+                        Intent.createChooser( shareIntent, "Share" ),
+                        SHARE_REQUEST_CODE
+                );
             }
         } catch (Exception e)
         {

@@ -62,6 +62,9 @@ Add the following key-value pairs to your `InfoAdditions` to avoid crashes on iO
         <key>NSContactsUsageDescription</key>
         <string>Access to contacts is required to assign images.</string>
 
+        <key>NSPhotoLibraryAddUsageDescription</key>
+        <string>Access to photo library is required to save images.</string>
+
     ]]></InfoAdditions>
 </iPhone>
 ```

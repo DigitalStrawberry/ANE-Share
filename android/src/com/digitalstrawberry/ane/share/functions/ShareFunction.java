@@ -99,26 +99,39 @@ public class ShareFunction extends BaseFunction implements IANEShareActivityResu
         int numImages = 0;
 
         ArrayList<Uri> sharedImages = new ArrayList<Uri>();
+        ArrayList<Uri> localFileUrls = new ArrayList<Uri>();
         String sharedMessage = "";
 
         for (long i = 0; i < numItems; i++)
         {
             FREObject freItem = freSharedItems.getObjectAt(i);
             FREObject data = freItem.getProperty("data");
+            boolean isLocalFileUrl = FREObjectUtils.getBoolean(freItem.getProperty("isLocalFileUrl"));
 
             // Text
             if (!(data instanceof FREBitmapData))
             {
-                if (!sharedMessage.equals(""))
+                String sharedDataString = FREObjectUtils.getString(data);;
+
+                // Treat it as a local file url
+                if (isLocalFileUrl)
                 {
-                    sharedMessage += "\n";
+                    localFileUrls.add(Uri.fromFile(new File(sharedDataString)));
                 }
-                sharedMessage += FREObjectUtils.getString(data);
+                else
+                {
+                    // A generic text message
+                    if (!sharedMessage.equals(""))
+                    {
+                        sharedMessage += "\n";
+                    }
+                    sharedMessage += sharedDataString;
+                }
+
             }
             // Image
             else
             {
-
                 Uri bitmapUri = getUriForBitmap((FREBitmapData) data, ++numImages);
                 if (bitmapUri != null)
                 {
@@ -151,19 +164,23 @@ public class ShareFunction extends BaseFunction implements IANEShareActivityResu
             addedItems = true;
         }
 
-        // Image(s)
-        if (sharedImages.size() > 1)
+        // Uri(s)
+        ArrayList<Uri> sharedUris = new ArrayList<Uri>();
+        sharedUris.addAll(localFileUrls);
+        sharedUris.addAll(sharedImages);
+        if (sharedUris.size() > 1)
         {
-            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, sharedImages);
+            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, sharedUris);
             addedItems = true;
-        } else if (sharedImages.size() == 1)
+        }
+        else if (sharedUris.size() == 1)
         {
-            shareIntent.putExtra(Intent.EXTRA_STREAM, sharedImages.get(0));
+            shareIntent.putExtra(Intent.EXTRA_STREAM, sharedUris.get(0));
             addedItems = true;
         }
 
         // Mixed types
-        if (sharedImages.size() > 0 && !sharedMessage.equals(""))
+        if (localFileUrls.size() > 0 || (sharedImages.size() > 0 && !sharedMessage.equals("")))
         {
             shareIntent.setType("*/*");
         }

@@ -1,6 +1,6 @@
 <extension xmlns="http://ns.adobe.com/air/extension/19.0">
   <id>com.digitalstrawberry.ane.share</id>
-  <versionNumber>1.0.4</versionNumber>
+  <versionNumber>1.0.5</versionNumber>
   <platforms>
      <platform name="iPhone-ARM">
         <applicationDeployment>

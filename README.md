@@ -115,6 +115,15 @@ var sharedItems:Vector.<SharedData> = new <SharedData>[sharedLink, sharedImage];
 Share.instance.share(sharedItems);
 ```
 
+When sharing URLs to local files you should set the `isLocalFileUrl` property to `true`. This tells the system to treat the value as a local file URL and not a generic `String`. This way the file can be added as an attachment when sharing via email and more appropriate sharing options can be shown to the user:
+
+```as3
+var sharedVideo:SharedData = new SharedData("/path/to/local/file.mp4");
+sharedVideo.isLocalFileUrl = true;
+
+...
+```
+
 You can add event listeners to be notified when sharing is finished. Note that Android applications do not necessarily respond correctly, therefore it is very common to receive the `CANCEL` event even when sharing is completed successfully on Android:
 
 ```as3
@@ -129,6 +138,10 @@ private function onSharingFinished(event:ShareEvent):void
 ```
 
 ### Changelog
+
+#### March 23, 2018 (v1.0.5)
+
+* Added support for sharing local file URLs
 
 #### January 2, 2018 (v1.0.4)
 

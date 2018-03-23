@@ -30,6 +30,7 @@ package com.digitalstrawberry.ane.share
 	{
 		private var mData:* = null;
 		private var mShareWithFacebook:Boolean = true;
+		private var mIsLocalFileUrl:Boolean = false;
 
 		/**
 		 * Creates new data to be shared.
@@ -73,6 +74,26 @@ package com.digitalstrawberry.ane.share
 		public function set shareWithFacebook(value:Boolean):void
 		{
 			mShareWithFacebook = value;
+		}
+
+
+		/**
+		 * Determines whether the shared string is actually a url to a local file. This tells the system to treat
+		 * the value as a local file URL and not a generic String. This way the file can be added as an attachment
+		 * when sharing via email and more appropriate sharing options can be shown to the user.
+		 */
+		public function get isLocalFileUrl():Boolean
+		{
+			return mIsLocalFileUrl;
+		}
+
+
+		/**
+		 * @private
+		 */
+		public function set isLocalFileUrl(value:Boolean):void
+		{
+			mIsLocalFileUrl = value;
 		}
 	}
 	

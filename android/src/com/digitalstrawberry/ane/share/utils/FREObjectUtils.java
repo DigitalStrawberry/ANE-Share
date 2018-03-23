@@ -24,14 +24,7 @@
 
 package com.digitalstrawberry.ane.share.utils;
 
-import android.os.Bundle;
-import com.adobe.fre.*;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import com.adobe.fre.FREObject;
 
 public class FREObjectUtils
 {

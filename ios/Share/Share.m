@@ -162,6 +162,23 @@ FREContext ShareExtContext = nil;
             return nil;
         }
         
+        // If the String is a local file url then cast it to NSURL
+        if([data isKindOfClass:[NSString class]])
+        {
+            FREObject freIsLocalFile = NULL;
+            if( ![self getObjectProperty:itemRaw propertyName:@"isLocalFileUrl" propertyValue:&freIsLocalFile] )
+            {
+                NSLog(@"Error reading 'isLocalFileUrl' property from SharedData object");
+                [self dispatchEvent:kEVENT_SHARE_ERROR withMessage:@"Error reading 'isLocalFile' property from SharedData object."];
+                return nil;
+            }
+            
+            if([MPFREObjectUtils getBOOL:freIsLocalFile])
+            {
+                data = [NSURL fileURLWithPath:data];
+            }
+        }
+        
         // Add the item to the result list
         ShareItem* item = [[ShareItem alloc] initWithPlaceholderItem:data];
         item.itemData = data;

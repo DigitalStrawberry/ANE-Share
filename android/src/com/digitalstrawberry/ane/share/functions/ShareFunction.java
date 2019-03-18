@@ -38,9 +38,7 @@ import com.digitalstrawberry.ane.share.utils.AIR;
 import com.digitalstrawberry.ane.share.utils.BitmapDataUtils;
 import com.digitalstrawberry.ane.share.utils.FREObjectUtils;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 
 public class ShareFunction extends BaseFunction implements IANEShareActivityResultCallback
@@ -116,7 +114,24 @@ public class ShareFunction extends BaseFunction implements IANEShareActivityResu
                 // Treat it as a local file url
                 if (isLocalFileUrl)
                 {
-                    localFileUrls.add(Uri.fromFile(new File(sharedDataString)));
+                    Context ctx = AIR.getContext().getActivity().getApplicationContext();
+                    File cachePath = new File(ctx.getCacheDir(), SHARE_DIR);
+                    cachePath.mkdirs();
+                    File sourceFile = new File(sharedDataString);
+                    File cacheFile = new File(cachePath, sourceFile.getName());
+
+                    try
+                    {
+                        copyFile(sourceFile, cacheFile);
+
+                        Uri uri = FileProvider.getUriForFile(ctx, ctx.getPackageName() + ".fileprovider", cacheFile);
+                        ctx.grantUriPermission(ctx.getPackageName(), uri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        localFileUrls.add(uri);
+                    }
+                    catch(IOException ignored)
+                    {
+
+                    }
                 }
                 else
                 {
@@ -140,17 +155,17 @@ public class ShareFunction extends BaseFunction implements IANEShareActivityResu
             }
         }
 
-        if (numItems <= 1 || sharedImages.size() <= 1)
-        {
-            shareIntent.setAction(Intent.ACTION_SEND);
-        }
-        else
+        if (numItems > 1 || sharedImages.size() > 1 || localFileUrls.size() > 1)
         {
             shareIntent.setAction(Intent.ACTION_SEND_MULTIPLE);
         }
+        else
+        {
+            shareIntent.setAction(Intent.ACTION_SEND);
+        }
 
         // Add temporary permission for other apps to read the saved image
-        if (sharedImages.size() > 0)
+        if (sharedImages.size() > 0 || localFileUrls.size() > 0)
         {
             shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
@@ -168,14 +183,14 @@ public class ShareFunction extends BaseFunction implements IANEShareActivityResu
         ArrayList<Uri> sharedUris = new ArrayList<Uri>();
         sharedUris.addAll(localFileUrls);
         sharedUris.addAll(sharedImages);
-        if (sharedUris.size() > 1)
-        {
-            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, sharedUris);
-            addedItems = true;
-        }
-        else if (sharedUris.size() == 1)
+        if (sharedUris.size() == 1 && sharedMessage.equals(""))
         {
             shareIntent.putExtra(Intent.EXTRA_STREAM, sharedUris.get(0));
+            addedItems = true;
+        }
+        else if (sharedUris.size() > 0)
+        {
+            shareIntent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, sharedUris);
             addedItems = true;
         }
 
@@ -217,6 +232,25 @@ public class ShareFunction extends BaseFunction implements IANEShareActivityResu
         stream.close();
 
         return FileProvider.getUriForFile(ctx, ctx.getPackageName() + ".fileprovider", imageFile);
+    }
+
+    private void copyFile(File src, File dst) throws IOException {
+        InputStream in = new FileInputStream(src);
+        try {
+            OutputStream out = new FileOutputStream(dst);
+            try {
+                // Transfer bytes from in to out
+                byte[] buf = new byte[1024];
+                int len;
+                while ((len = in.read(buf)) > 0) {
+                    out.write(buf, 0, len);
+                }
+            } finally {
+                out.close();
+            }
+        } finally {
+            in.close();
+        }
     }
 
 }

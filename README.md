@@ -139,6 +139,10 @@ private function onSharingFinished(event:ShareEvent):void
 
 ### Changelog
 
+#### March 18, 2019 (v1.0.6)
+
+* Updated file sharing for Android API 24+
+
 #### March 23, 2018 (v1.0.5)
 
 * Added support for sharing local file URLs

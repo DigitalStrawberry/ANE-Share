@@ -37,6 +37,7 @@ package com.digitalstrawberry.ane.share
 
 		private var mPosition:Rectangle;
 		private var mArrowDirection:int = ARROW_ANY;
+		private var mMimeType:String = null;
 
 		
 		public function ShareOptions()
@@ -84,6 +85,24 @@ package com.digitalstrawberry.ane.share
 		public function set arrowDirection(value:int):void
 		{
 			mArrowDirection = value;
+		}
+		
+		
+		/**
+		 * Sets an explicit MIME data type (Android only).
+		 */
+		public function get mimeType():String
+		{
+			return mMimeType;
+		}
+		
+		
+		/**
+		 * @private
+		 */
+		public function set mimeType(value:String):void
+		{
+			mMimeType = value;
 		}
 	}
 	

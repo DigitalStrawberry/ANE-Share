@@ -55,12 +55,19 @@ public class ShareFunction extends BaseFunction implements IANEShareActivityResu
         super.call(context, args);
 
         FREArray freSharedItems = (FREArray) args[0];
-        // Options not applicable to Android
+        String mimeType = null;
+
+        try
+        {
+            mimeType = getMimeType(args[1]);
+        } catch (Exception ignored)
+        {
+        }
 
         try
         {
             Intent shareIntent = new Intent();
-            if(addSharedItems(freSharedItems, shareIntent))
+            if(addSharedItems(freSharedItems, mimeType, shareIntent))
             {
                 AndroidActivityWrapper.GetAndroidActivityWrapper().addActivityResultListener( this );
                 AIR.getContext().getActivity().startActivityForResult(
@@ -91,7 +98,7 @@ public class ShareFunction extends BaseFunction implements IANEShareActivityResu
     }
 
 
-    private boolean addSharedItems(FREArray freSharedItems, Intent shareIntent) throws FREWrongThreadException, FREInvalidObjectException, FRETypeMismatchException, FREASErrorException, FRENoSuchNameException, IOException
+    private boolean addSharedItems(FREArray freSharedItems, String mimeType, Intent shareIntent) throws FREWrongThreadException, FREInvalidObjectException, FRETypeMismatchException, FREASErrorException, FRENoSuchNameException, IOException
     {
         long numItems = freSharedItems.getLength();
         int numImages = 0;
@@ -194,8 +201,13 @@ public class ShareFunction extends BaseFunction implements IANEShareActivityResu
             addedItems = true;
         }
 
+        // Explicit MIME type
+        if(mimeType != null)
+        {
+            shareIntent.setType(mimeType);
+        }
         // Mixed types
-        if (localFileUrls.size() > 0 || (sharedImages.size() > 0 && !sharedMessage.equals("")))
+        else if (localFileUrls.size() > 0 || (sharedImages.size() > 0 && !sharedMessage.equals("")))
         {
             shareIntent.setType("*/*");
         }
@@ -251,6 +263,15 @@ public class ShareFunction extends BaseFunction implements IANEShareActivityResu
         } finally {
             in.close();
         }
+    }
+
+    private String getMimeType(FREObject freOptions) throws FREASErrorException, FREInvalidObjectException, FREWrongThreadException, FRENoSuchNameException, FRETypeMismatchException
+    {
+        if(freOptions == null) {
+            return null;
+        }
+
+        return freOptions.getProperty("mimeType").getAsString();
     }
 
 }

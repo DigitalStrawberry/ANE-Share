@@ -12,11 +12,11 @@ Download the ANE from the [releases](../../releases/) page and add it to your ap
 </extensions>
 ```
 
-If you are targeting Android, add the Android Support extension from [this repository](https://github.com/marpies/android-dependency-anes/releases) as well (unless you know it is included by some other extension):
+If you are targeting Android, add the Android Support V4 extension from [Distriqt](https://github.com/distriqt/ANE-AndroidSupport) as well:
 
 ```xml
 <extensions>
-    <extensionID>com.marpies.ane.androidsupport</extensionID>
+    <extensionID>com.distriqt.androidsupport.V4</extensionID>
 </extensions>
 ```
 

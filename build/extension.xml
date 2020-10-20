@@ -42,6 +42,14 @@
         </applicationDeployment>
     </platform>
 
+    <platform name="Android-x64">
+        <applicationDeployment>
+            <nativeLibrary>libShare.jar</nativeLibrary>
+            <initializer>com.digitalstrawberry.ane.share.ShareExtension</initializer>
+            <finalizer>com.digitalstrawberry.ane.share.ShareExtension</finalizer>
+        </applicationDeployment>
+    </platform>
+
     <platform name="default">
         <applicationDeployment/>
     </platform>

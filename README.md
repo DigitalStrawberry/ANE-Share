@@ -12,13 +12,15 @@ Download the ANE from the [releases](../../releases/) page and add it to your ap
 </extensions>
 ```
 
-If you are targeting Android, add the Android Support V4 extension from [Distriqt](https://github.com/distriqt/ANE-AndroidSupport) as well:
+If you are targeting Android, add the AndroidX Core extension from [Distriqt](https://github.com/distriqt/ANE-AndroidSupport) as well:
 
 ```xml
 <extensions>
-    <extensionID>com.distriqt.androidsupport.V4</extensionID>
+    <extensionID>androidx.core</extensionID>
 </extensions>
 ```
+
+> Credits to [Distriqt](https://github.com/distriqt) for providing this and other extensions.
 
 Furthermore, modify `manifestAdditions` element so that it contains the following `provider` element:
 
@@ -31,7 +33,7 @@ Furthermore, modify `manifestAdditions` element so that it contains the followin
             <application>
 
                 <provider
-                    android:name="android.support.v4.content.FileProvider"
+                    android:name="androidx.core.content.FileProvider"
                     android:authorities="{APP_PACKAGE_NAME}.fileprovider"
                     android:grantUriPermissions="true"
                     android:exported="false">
@@ -138,6 +140,19 @@ private function onSharingFinished(event:ShareEvent):void
 ```
 
 ### Changelog
+
+#### October 20, 2020 (v1.1.0)
+
+* Added support for AndroidX
+* Added `Android-x64` target
+
+#### January 14, 2020 (v1.0.8)
+
+* Added support for Android 64bit
+
+#### March 25, 2019 (v1.0.7)
+
+* Added support for custom MIME type (Android only)
 
 #### March 18, 2019 (v1.0.6)
 

@@ -3,14 +3,16 @@
 buildscript {
     repositories {
         mavenCentral()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.+'
+        classpath 'com.android.tools.build:gradle:3.2.1'
     }
 }
 
 repositories {
     jcenter()
+    google()
 }
 
 
@@ -19,16 +21,16 @@ apply plugin: 'com.android.library'
 dependencies {
     compile files('libs/FlashRuntimeExtensions.jar')
     compile files('libs/runtimeClasses.jar')
-    compile 'com.android.support:support-v4:24+'
+    compile 'androidx.core:core:1.2.0'
 }
 
 android {
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion 28
     }
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
     
     lintOptions {
         abortOnError false

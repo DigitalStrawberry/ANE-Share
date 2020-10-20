@@ -13,3 +13,4 @@ bin
 ios/Share.xcodeproj/xcuserdata
 ios/build
 ios/Share.xcodeproj/project.xcworkspace/xcuserdata
+build/.gradle
